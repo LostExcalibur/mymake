@@ -1,0 +1,17 @@
+main: main.o c.o d.o
+	gcc main.o c.o d.o -o main
+
+main.o: main.c c.h d.h
+	gcc -c main.c
+
+a.o: a.c a.h
+	gcc -c a.c
+
+b.o: b.o b.h
+	gcc -c b.c
+
+c.o: c.c c.h
+	gcc -c c.c
+
+d.o: d.c d.h
+	gcc -c d.c
