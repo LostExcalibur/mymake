@@ -26,12 +26,11 @@ void lire(void){
 	FILE * fichier;
 	char * ligne = NULL;
 	size_t len = 0;
-	ssize_t nread;
 	fichier = fopen("Makefile","r");
 	if (fichier == NULL){
 		fprintf(stderr,"Le fichier est introuvable");
 	}
-	while((nread = getline(&ligne, &len, fichier))!= -1){
+	while(getline(&ligne, &len, fichier) != -1){
 		if (ligne[0] != '\t'){
 			char *coupe = strtok(ligne, " ");
 			int nb_mots = strlen(coupe);
