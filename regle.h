@@ -8,11 +8,15 @@ typedef struct Regle {
 
 	int n_prerequis;
 	int n_commandes;
+
+	int prerequis_actuel;
+	int commande_actuelle;
 } regle;
 
 void applique_regle(regle* r);
-regle* nouvelle_regle(char* nom);
+regle* nouvelle_regle(char* nom, int n_prerequis, int n_commandes);
 void detruire_regle(regle* r);
-
+void ajouter_prerequis(regle* r, char* prerequis);
+void ajouter_commande(regle* r, char* commande);
 
 #endif // __REGLE_H
