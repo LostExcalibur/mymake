@@ -6,3 +6,7 @@ main.o: main.c regle.h
 
 regle.o: regle.c regle.h
 	cc -c regle.c
+
+clean:
+	-rm *.o mymake
+

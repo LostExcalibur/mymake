@@ -10,5 +10,6 @@ typedef struct Regle {
 	int n_commandes;
 } regle;
 
+void applique_regle(regle* r);
 
 #endif // __REGLE_H
