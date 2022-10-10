@@ -15,8 +15,10 @@ ens_regles* nouvel_ensemble(int nb_regles) {
 }
 
 void detruire_ensemble(ens_regles* ens) {
+	for (int i = 0; i < ens->regle_actuelle; i++) {
+		detruire_regle(ens->regles[i]);
+	}
 	free(ens->regles);
-
 	free(ens);
 }
 

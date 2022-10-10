@@ -93,7 +93,10 @@ ens_regles * lire(void){
 }
 
 int main(void) {
-	lire();
+	ens_regles* ens = lire();
+	
+	afficher_ensemble(ens);
+	detruire_ensemble(ens);
 
 	return 0;
 }
