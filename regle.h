@@ -11,5 +11,8 @@ typedef struct Regle {
 } regle;
 
 void applique_regle(regle* r);
+regle* nouvelle_regle(char* nom);
+void detruire_regle(regle* r);
+
 
 #endif // __REGLE_H
