@@ -10,7 +10,7 @@ typedef struct Ens_Regles {
 } ens_regles;
 
 
-ens_regles* nouvel_ensemble(int taille);
+ens_regles* nouvel_ensemble(int nb_regles);
 void detruire_ensemble(ens_regles* ens);
 void ajouter_regle(ens_regles* ens, regle* r);
 regle* trouver_regle(ens_regles* ens, char* nom);

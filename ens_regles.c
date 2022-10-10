@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-ens_regles* nouvel_ensemble(int taille) {
+ens_regles* nouvel_ensemble(int nb_regles) {
 	ens_regles* ens = malloc(sizeof(ens_regles));
 
-	ens->regles = malloc(taille * sizeof(regle *));
+	ens->regles = malloc(nb_regles * sizeof(regle *));
 
 	ens->regle_actuelle = 0;
 
