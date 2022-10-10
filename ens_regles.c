@@ -35,4 +35,11 @@ regle* trouver_regle(ens_regles* ens, char* nom) {
 		}		
 	}
 	return NULL;
-}	
+}
+
+
+void afficher_ensemble(ens_regles* ens) {
+	for (int i = 0; i < ens->regle_actuelle; i++) {
+		afficher_regle(ens->regles[i]);
+	}	
+}

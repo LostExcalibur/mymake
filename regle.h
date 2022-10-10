@@ -14,9 +14,13 @@ typedef struct Regle {
 } regle;
 
 void applique_regle(regle* r);
+
 regle* nouvelle_regle(char* nom, int n_prerequis, int n_commandes);
 void detruire_regle(regle* r);
+
 void ajouter_prerequis(regle* r, char* prerequis);
 void ajouter_commande(regle* r, char* commande);
+
+void afficher_regle(regle* r);
 
 #endif // __REGLE_H

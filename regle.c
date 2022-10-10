@@ -44,3 +44,17 @@ void ajouter_commande(regle* r, char* commande) {
 
 	r->commande_actuelle++;
 }
+
+void afficher_regle(regle* r) {
+	printf("%s : ", r->nom);
+	for (int i = 0; i < r->prerequis_actuel; i++) {
+		printf("%s ", r->prerequis[i]);
+	}
+	printf("\n");
+	for (int i = 0; i < r->commande_actuelle; i++) {
+		printf("\t%s\n", r->commandes[i]);
+	}
+	printf("\n");
+}
+
+
