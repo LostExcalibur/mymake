@@ -23,10 +23,17 @@
  *   ////////                                                        |_|   |_|  \___/|_| |_|_|_|\___/     |____|\___/____|____|
 */
 
-int main(void) {
+int main(int argc, char ** argv) {
 	ens_regles* ens = lire_fichier("Makefile");
 	
-	appliquer_ens_regle(ens, "main");
+	if (argc > 1){
+		for (int i=1 ; i < argc; i++){
+			appliquer_ens_regle(ens, argv[i]);
+		}
+	}
+	else {
+		appliquer_ens_regle(ens, ens->regles[0]->nom);
+	}
 	detruire_ensemble(ens);
 
 	return 0;
