@@ -8,7 +8,7 @@
 #include <assert.h>
 
 
-int nombre_regles(FILE *fichier){
+int nombre_regles(FILE *fichier){//Pour pouvoir construire l’ensemble de règles, il nous faut d’abord connaître le nombre de règle. On fait donc un premier parcours du Makefile, où on compte le nombre de ':', qui est équivalent au nombre de règles.
 	fseek(fichier,0, SEEK_SET);
 	int i = 0;
 	int c;
@@ -68,15 +68,16 @@ void ajouter_prochaine_regle(FILE* fichier, ens_regles* ens) {
 	}
     char* commande = NULL;
 
+	// Calcul du nombre de commades
 	int nb_commandes = 0;
-	long debut = ftell(fichier);
+	long debut = ftell(fichier); //On enregistre l’endroit où on est dans le fichier, pour pouvoir y revenir après et parcourir les commandes une seconde fois
     while (getline(&commande, &taille_tampon, fichier) != -1) {
 		if (commande[0] != '\t') {
 			break;
 		}
 		nb_commandes += 1;
 	}
-	fseek(fichier, debut, SEEK_SET);
+	fseek(fichier, debut, SEEK_SET); //On retourne à l’endroit du fichier enregistré dans "début", pour pouvoir faire un second parcours des commades.
 
 	regle* r = nouvelle_regle(ligne, nb_prerequis, nb_commandes);
 
