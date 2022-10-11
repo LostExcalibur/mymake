@@ -23,5 +23,5 @@ lecture_dbg.o: lecture.c lecture.h
 	cc -g -c lecture.c -o debug/lecture_dbg.o
 
 clean:
-	-rm *.o mymake
+	-rm *.o
 
