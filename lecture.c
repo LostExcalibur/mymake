@@ -36,6 +36,9 @@ void ajouter_prochaine_regle(FILE* fichier, ens_regles* ens) {
 	// On saute les lignes vides
 	do {
     	taille_ligne = getline(&ligne, &taille_tampon, fichier);
+		if (taille_ligne == -1) {
+			return;
+		}
 	} while (ligne[0] == '\n');
 	// On enlève le \n
 	ligne[taille_ligne - 1] = '\0';
@@ -88,6 +91,8 @@ void ajouter_prochaine_regle(FILE* fichier, ens_regles* ens) {
 	}
 
 	ajouter_regle(ens, r);
+	// free(ligne);
+	free(commande);
 }
 
 ens_regles* lire_fichier(const char* nom) {
@@ -96,7 +101,7 @@ ens_regles* lire_fichier(const char* nom) {
 	size_t len = 0;
 	fichier = fopen(nom,"r");
 	if (fichier == NULL){
-		fprintf(stderr,"Le fichier est introuvable");
+		perror("fopen");
 		exit(1);
 	}
 
@@ -108,48 +113,6 @@ ens_regles* lire_fichier(const char* nom) {
 		ajouter_prochaine_regle(fichier, ens);
 	}
 
-	/* while(getline(&ligne, &len, fichier) != -1){
-		if (ligne[0] != '\t'){
-			char * nom_regle  = strtok(ligne, ":");
-
-			char *prerequis;
-			int nb_prerequis = 0;
-			while((prerequis = strtok(NULL, " ")) != 0){
-				nb_prerequis ++;
-			}
-
-			int nb_commandes = 0;
-			char* commande = NULL;
-
-			while(getline(&commande, &len, fichier) != -1){
-				if(commande[0] != '\t'){
-					break;
-				}
-				nb_commandes += 1;
-			}
-
-			fseek(fichier,debut,SEEK_SET);
-			regle * r = nouvelle_regle(nom_regle,nb_prerequis,nb_commandes);
-
-			getline(&ligne, &len, fichier);
-			while((prerequis = strtok(ligne, " ")) != 0){
-				ajouter_prerequis(r, prerequis);
-			}
-
-			while(getline(&commande, &len, fichier) != -1){
-				if(commande[0] != '\t'){
-					break;
-				}
-				commande += 1;
-				ajouter_commande(r,commande);
-			}
-
-			ajouter_regle(ens, r);	
-
-		}
-		debut = ftell(fichier);
-	};
-	*/
 	fclose(fichier);
 	return ens;
 }

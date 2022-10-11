@@ -27,9 +27,9 @@ regle* nouvelle_regle(char* nom, int n_prerequis, int n_commandes) {
 
 
 void detruire_regle(regle* r) {
-	for (int i = 0; i < r->prerequis_actuel; i++) {
+	/* for (int i = 0; i < r->prerequis_actuel; i++) {
 		free(r->prerequis[i]);
-	}
+	} */
 	for (int i = 0; i < r->commande_actuelle; i++) {
 		free(r->commandes[i]);
 	}
@@ -58,7 +58,7 @@ void afficher_regle(regle* r) {
 	}
 	printf("\n");
 	for (int i = 0; i < r->commande_actuelle; i++) {
-		printf("\t%s\n", r->commandes[i]);
+		printf("%s\n", r->commandes[i]);
 	}
 	printf("\n");
 }
