@@ -13,8 +13,6 @@ typedef struct Regle {
 	int commande_actuelle;
 } regle;
 
-void applique_regle(regle* r);
-
 regle* nouvelle_regle(char* nom, int n_prerequis, int n_commandes);
 void detruire_regle(regle* r);
 

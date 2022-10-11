@@ -1,4 +1,5 @@
 *.o
 mymake
 
+exemples/
 debug/

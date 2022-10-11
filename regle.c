@@ -4,12 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-void applique_regle(regle* r) {
-	for (int i = 0; i < r->n_commandes; i++) {
-		printf("%s\n", r->commandes[i]);
-		system(r->commandes[i]);
-	}
-}
 
 regle* nouvelle_regle(char* nom, int n_prerequis, int n_commandes) {
 	regle* r = malloc(sizeof(regle));
