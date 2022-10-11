@@ -25,7 +25,6 @@
 
 int main(int argc, char ** argv) {
 	ens_regles* ens = lire_fichier("Makefile");
-	
 	if (argc > 1){
 		for (int i=1 ; i < argc; i++){
 			appliquer_ens_regle(ens, argv[i]);
