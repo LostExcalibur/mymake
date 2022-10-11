@@ -1,0 +1,5 @@
+Pour la lecture des fichiers du dossiers (qu’on fait dans la fonction "appliquer_ens_regles"), on utilise le code trouvé à l’addresse : https://www.sanfoundry.com/c-program-list-files-directory/
+
+
+man
+
