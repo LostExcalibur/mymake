@@ -14,6 +14,9 @@ ens_regles* nouvel_ensemble(int nb_regles);
 void detruire_ensemble(ens_regles* ens);
 
 void ajouter_regle(ens_regles* ens, regle* r);
+
+// Renvoit un pointeur vers la règle ayant le nom correspondant.
+// Renvoit NULL si elle n'existe pas dans l'ensemble
 regle* trouver_regle(ens_regles* ens, char* nom);
 
 void afficher_ensemble(ens_regles* ens);

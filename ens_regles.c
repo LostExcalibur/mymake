@@ -28,8 +28,6 @@ void ajouter_regle(ens_regles* ens, regle* r) {
 }
 
 
-// Renvoit un pointeur vers la règle ayant le nom correspondant.
-// Renvoit NULL si elle n'existe pas dans l'ensemble
 regle* trouver_regle(ens_regles* ens, char* nom) {
 	for (int i = 0; i < ens->regle_actuelle; i++) {
 		if (strcmp(ens->regles[i]->nom, nom) == 0) {
