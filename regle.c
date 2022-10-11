@@ -52,7 +52,7 @@ void afficher_regle(regle* r) {
 	}
 	printf("\n");
 	for (int i = 0; i < r->commande_actuelle; i++) {
-		printf("%s\n", r->commandes[i]);
+		printf("%s", r->commandes[i]);
 	}
 	printf("\n");
 }

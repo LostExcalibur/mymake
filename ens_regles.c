@@ -38,24 +38,27 @@ regle* trouver_regle(ens_regles* ens, char* nom) {
 	return NULL;
 }
 
-void appliquer_ens_regle(ens_regles* ens, char* nom){
+void auxilliaire(ens_regles* ens, char* nom){
+	regle * r = trouver_regle(ens, nom);
+	if (r == NULL){
+		return;
+	}
+	for (int i = 0; i < r->n_prerequis; i++){
+		auxilliaire(ens, r->prerequis[i]);
+	}
+	for (int i =0; i < r->n_commandes; i++){
+		printf("%s", r->commandes[i] + 1);
+		system(r->commandes[i]);
+	}
+}
+
+void appliquer_ens_regle(ens_regles* ens, char* nom) {
 	regle * r = trouver_regle(ens, nom);
 	if (r == NULL){
 		fprintf(stderr,"Aucune règle pour fabriquer la cible «%s». Arrrêt.\n",nom);
 		return ;
 	}
-	void auxilliaire(ens_regles* ens, char* nom){
-		regle * r = trouver_regle(ens, nom);
-		if (r == NULL){
-			return;
-		}
-		for (int i = 0; i < r->n_prerequis; i++){
-			auxilliaire(ens, r->prerequis[i]);
-		}
-		for (int i =0; i < r->n_commandes; i++){
-			system(r->commandes[i]);
-		}
-	}
+
 	auxilliaire(ens, nom);
 }
 

@@ -26,7 +26,7 @@
 int main(void) {
 	ens_regles* ens = lire_fichier("Makefile");
 	
-	afficher_ensemble(ens);
+	appliquer_ens_regle(ens, "main");
 	detruire_ensemble(ens);
 
 	return 0;

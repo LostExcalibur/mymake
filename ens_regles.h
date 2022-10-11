@@ -20,5 +20,6 @@ void ajouter_regle(ens_regles* ens, regle* r);
 regle* trouver_regle(ens_regles* ens, char* nom);
 
 void afficher_ensemble(ens_regles* ens);
+void appliquer_ens_regle(ens_regles* ens, char* nom);
 
 #endif // __ENS_REGLES_H
