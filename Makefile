@@ -1,4 +1,4 @@
-main: main.c regle.o ens_regles.o lecture.o
+mymake: main.c regle.o ens_regles.o lecture.o
 	cc -Wall -Wextra -o mymake main.c regle.o ens_regles.o lecture.o
 
 debug: main.c regledbg.o ens_reglesdbg.o lecture_dbg.o
