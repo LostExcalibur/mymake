@@ -57,8 +57,14 @@ void ajouter_prochaine_regle(FILE* fichier, ens_regles* ens) {
 	// Calcul du nombre de prerequis
 	for (int i = pos_fin_nom + 1; i < taille_ligne;) {
 		i += strspn(ligne + i, " ");
-		i += strcspn(ligne + i, " ");
-		nb_prerequis += 1;
+		int longueur_mot_actuel;
+		// Condition nécessaire si la ligne finit par un (ou plusieurs) espace(s)
+		if ((longueur_mot_actuel = strcspn(ligne + i, " ")) > 0) {
+			nb_prerequis += 1;
+			i += longueur_mot_actuel;
+		} else {
+			break;
+		}
 	}
     char* commande = NULL;
 
