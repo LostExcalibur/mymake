@@ -106,7 +106,6 @@ ens_regles* lire_fichier(const char* nom) {
 	}
 
 	int nb_regles = nombre_regles(fichier);
-	printf("%d\n", nb_regles);
 	ens_regles * ens = nouvel_ensemble(nb_regles);
 
 	while (!feof(fichier)) {

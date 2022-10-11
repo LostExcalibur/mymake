@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 ens_regles* nouvel_ensemble(int nb_regles) {
 	ens_regles* ens = malloc(sizeof(ens_regles));
@@ -36,6 +37,28 @@ regle* trouver_regle(ens_regles* ens, char* nom) {
 	}
 	return NULL;
 }
+
+void appliquer_ens_regle(ens_regles* ens, char* nom){
+	regle * r = trouver_regle(ens, nom);
+	if (r == NULL){
+		fprintf(stderr,"Aucune règle pour fabriquer la cible «%s». Arrrêt.\n",nom);
+		return ;
+	}
+	void auxilliaire(ens_regles* ens, char* nom){
+		regle * r = trouver_regle(ens, nom);
+		if (r == NULL){
+			return;
+		}
+		for (int i = 0; i < r->n_prerequis; i++){
+			auxilliaire(ens, r->prerequis[i]);
+		}
+		for (int i =0; i < r->n_commandes; i++){
+			system(r->commandes[i]);
+		}
+	}
+	auxilliaire(ens, nom);
+}
+
 
 
 void afficher_ensemble(ens_regles* ens) {
