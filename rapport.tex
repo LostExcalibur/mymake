@@ -1,3 +1,24 @@
+%
+% *             ///((/////                   *&&&&&&&&              %&&&&&&&&    
+% *          //(/////((//////              /&&&     *&&&          &&&&     %&&&  
+% *        /(//^     ^//(//(///            &&&                   #&&             
+% *      ///^,        //////////           &&&                    &&&            
+% *               //////////(///            &&&&&&         *%&(    &&&&&&%       
+% *             //////(///////////          &&&&&&      &&&&&&&&&&%   *&&&&&&&   
+% *             ^^^////////(//^////        &&&        %&&#       &&&        &&&* 
+% *             ^^^/(/////////^////        &&&        &&&        #&&         &&% 
+% *          ^^^  ////////(////^^^^        (&&&     *&&&          &&&%     #&&&  
+% *       ^^^^^^^^/(////((////^ ^^^^         (&&&&&&&&              &&&&&&&&&                               __     _  __   __
+% *     .^^^///////////////////                                       |  __ \                              |__ \ / _ \__ \|__ \
+% *     /^///////,..//////^//////^                                    | |__) | __ ___  _ __ ___   ___         ) | | | | ) |  ) |     
+% * ////////////#////////    ^^^^^                                    |  ___/ '__/ _ \| '_ ` _ \ / _ \       / /| | | |/ /  / /   
+% *  /////((((////////        ^^^^                                    | |   | | | (_) | | | | | | (_) |     / /_| |_| / /_ / /_ 
+% *   ////////                                                        |_|   |_|  \___/|_| |_| |_|\___/     |____|\___/____|____|
+%
+
+
+
+
 \documentclass{article}
 
 \usepackage{geometry}
@@ -5,6 +26,7 @@
 \usepackage{indentfirst}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{hyperref}
 
 
 
@@ -18,9 +40,11 @@
 
 \section{Introduction}
 
+L’objectif de ce projet est de construire une programme pour simplifier et optimiser la compilation de programmes, nottamet lorsque ceux-ci comportent beaucoup de fichiers et de modules avec des inter-dépendances. Nous allons donc construire un programe \texttt{mymake}, qui, grâce à la lecture d’un fichier \texttt{Makefile}, se contentera de compiler uniquement les programmes ayant été modifié, ainsi que les programmes dépedant de ceux-ci, ce qui permettra de ne re-compiler que ce qui est nécessaire.
+
 \section{Réponses aux questions}
 
-\paragraph{Question 1} Pas trop de difficultés pour la création du \texttt{Makefile}. On a cependant perdu un peu de temps avant de comprendre que la commande \texttt{make} ne fonctionne pas avec le fichier intitulé \texttt{MakeFile} au lieu de \texttt{Makefile} (en revanche \texttt{makefile} fonctionne bien).
+\paragraph{Question 1} Pas trop de difficultés pour la création du \texttt{Makefile}, les dépendances des fichiers \texttt{a.o, b.o, c.o, d.o} sont simples. Pour la cible \texttt{main.o} il faut simpleemnt inclure les headers \texttt{c.h} et \texttt{d.h}, et pour la cible main, il faut inclure tous les  fichiers \texttt{.o} qu’on à construit. On a cependant perdu un peu de temps avant de comprendre que la commande \texttt{make} ne fonctionne pas avec le fichier intitulé \texttt{MakeFile} au lieu de \texttt{Makefile} (en revanche \texttt{makefile} fonctionne bien). La cible \texttt{clean} permet de supprimer les fichiers en \texttt{.o} si besoin. Voici le contenu du fichier \texttt{Makefile}~:
 
 \begin{verbatim}
 
@@ -45,15 +69,23 @@ d.o: d.c d.h
 clean:
         rm *.o main
 
-
 \end{verbatim}
 
 \paragraph{Question 2}
 
+lien vers notre code \texttt{\href{https://github.com/LostExcalibur/mymake/blob/master/regle.c}{regle.c}}
+
+patate
 
 \paragraph{Question 3}
 
 \paragraph{Question 4}
+
+lien vers le code : \texttt{\href{https://github.com/LostExcalibur/mymake/blob/master/lecture.c}{lecture.c}}
+
+L’objectif ici est de lire le fichier \texttt{Makefile} pour obtenir un ensemble de règles (appelé \texttt{ens}), que l’on pourra ensuite exécuter suivant leur dépendances. Pour initialiser l’ensemble de règles, il nous faut d’abord connaître le nombres de règles. On fait donc un premier parcours du fichier (à l’aide le la fonction \texttt{nombre\_regles}, qui compte le nombre de \texttt{:} pour déterminer le nombre de règle) dans le but de compter le nombre de règles, afin d’initialiser notre ensemble de règles.
+
+Ensuite, on va ajouter les règles une à une dans l’ensemble de règles. Encore une fois, avant de créer notre règle avec nos prérequis et nos commandes, il nous faut connaître le nombre de prérequis, et le nombre de commandes. 
 
 \paragraph{Question 5}
 
