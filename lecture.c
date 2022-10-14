@@ -18,18 +18,17 @@ int nombre_regles(FILE *fichier){//Pour pouvoir construire l’ensemble de règl
 	fseek(fichier,0, SEEK_SET);
 	return i;
 }
-// \0 _ _ _ _ a
+
 // On lit la première ligne :
 // 		on lit jusqu'aux : puis on lit jusqu'au premier caractère qui n'est pas un espace
 //		on ajoute un, on lit jusqu'au prochain espace, puis jusqu'au prochain qui n'en est pas un
-
 void ajouter_prochaine_regle(FILE* fichier, ens_regles* ens) {
     size_t taille_tampon = 32;
-    char* ligne = malloc(taille_tampon * sizeof(char));
+    char* ligne =  malloc(taille_tampon * sizeof(char));
     if (ligne == NULL) {
         perror("malloc");
         exit(1);
-    }
+     }
 
 	size_t taille_ligne;
 
@@ -37,6 +36,7 @@ void ajouter_prochaine_regle(FILE* fichier, ens_regles* ens) {
 	do {
     	taille_ligne = getline(&ligne, &taille_tampon, fichier);
 		if (taille_ligne == -1) {
+			free(ligne);
 			return;
 		}
 	} while (ligne[0] == '\n');
