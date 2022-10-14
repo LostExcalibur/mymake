@@ -11,8 +11,6 @@ regle* nouvelle_regle(char* nom, int n_prerequis, int n_commandes) {
 	r->commandes = malloc(sizeof(char*) * n_commandes);
 	
 	r->nom = nom;
-	r->n_commandes = n_commandes;
-	r->n_prerequis = n_prerequis;
 
 	r->prerequis_actuel = 0;
 	r->commande_actuelle = 0;

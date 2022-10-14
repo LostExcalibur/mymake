@@ -81,15 +81,15 @@ int auxilliaire(ens_regles* ens, char* nom, char* nom_parent){
 	// Si on a des prérequis, on veut vérifier qu'ils ont besoin d'être construits.
 	// Cependant, si on n'a pas de prérequis on veut tout le temps construire la règle
 	// Exemple ./mymake clean 
-	int modifie = r->n_prerequis == 0;
+	int modifie = r->prerequis_actuel == 0;
 
-	for (int i = 0; i < r->n_prerequis; i++){
+	for (int i = 0; i < r->prerequis_actuel; i++){
 		if (auxilliaire(ens, r->prerequis[i],nom)) {
 			modifie = 1;
 		}
 	}
 	if (modifie) {
-		for (int i = 0; i < r->n_commandes; i++){
+		for (int i = 0; i < r->commande_actuelle; i++){
 			printf("%s", r->commandes[i] + 1);
 			system(r->commandes[i]);
 		}

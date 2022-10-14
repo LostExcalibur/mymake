@@ -6,9 +6,6 @@ typedef struct Regle {
 	char** prerequis;
 	char** commandes;
 
-	int n_prerequis;
-	int n_commandes;
-
 	int prerequis_actuel;
 	int commande_actuelle;
 } regle;
