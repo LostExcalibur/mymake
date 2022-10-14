@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <dirent.h>
+#include <unistd.h>
 
+// TODO : check malloc
 ens_regles* nouvel_ensemble(int nb_regles) {
 	ens_regles* ens = malloc(sizeof(ens_regles));
 
@@ -42,21 +43,12 @@ regle* trouver_regle(ens_regles* ens, char* nom) {
 void auxilliaire(ens_regles* ens, char* nom, char* nom_parent){
 	regle * r = trouver_regle(ens, nom);
 
-	if (r == NULL){
-		DIR *d;
-		struct dirent *dir;
-		d = opendir(".");
-		if (!d) {
-			fprintf(stderr, "Ne peut pas ouvrir le dossier");
-			exit(1);
-		}
-		while ((dir = readdir(d)) != NULL) {
-			if (strcmp(dir->d_name,nom) == 0) {
-				return;
-			}
-		}
-		fprintf(stderr,"Aucune règle pour fabriquer la cible %s, nécessaire pour %s",nom,nom_parent);
-		return;
+	if (r == NULL) {
+		if (access(nom, F_OK) == 0) {
+			return;
+		}	
+		fprintf(stderr,"Aucune règle pour fabriquer la cible %s, nécessaire pour %s\n", nom, nom_parent);
+		exit(1);
 	}
 	for (int i = 0; i < r->n_prerequis; i++){
 		auxilliaire(ens, r->prerequis[i],nom);
@@ -75,7 +67,6 @@ void appliquer_ens_regle(ens_regles* ens, char* nom) {
 	}
 
 	auxilliaire(ens, nom,NULL);
-
 }
 
 

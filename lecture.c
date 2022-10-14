@@ -104,8 +104,6 @@ void ajouter_prochaine_regle(FILE* fichier, ens_regles* ens) {
 
 ens_regles* lire_fichier(const char* nom) {
 	FILE * fichier;
-	char * ligne = NULL;
-	size_t len = 0;
 	fichier = fopen(nom,"r");
 	if (fichier == NULL){
 		perror("fopen");

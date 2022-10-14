@@ -27,6 +27,7 @@ void detruire_regle(regle* r) {
 	for (int i = 0; i < r->commande_actuelle; i++) {
 		free(r->commandes[i]);
 	}
+	free(r->nom);
 	free(r->commandes);
 	free(r->prerequis);
 
@@ -56,5 +57,4 @@ void afficher_regle(regle* r) {
 	}
 	printf("\n");
 }
-
 
