@@ -81,13 +81,46 @@ patate
 
 \paragraph{Question 4}
 
+On construit ici le Makefile comme on à fait précédemment dans la question 1, et on obtient, dans le cas de notre projet, on obtient \href{https://github.com/LostExcalibur/mymake/blob/master/Makefile}{ce fichier}~:
+
+\begin{verbatim}
+
+mymake: main.c regle.o ens_regles.o lecture.o
+    cc -Wall -Wextra -o mymake main.c regle.o ens_regles.o lecture.o
+
+debug: main.c regledbg.o ens_reglesdbg.o lecture_dbg.o
+    cc -Wall -Wextra -g -o debug/dbg_make -Og main.c debug/regledbg.o debug/ens_reglesdbg.o debug/lecture_dbg.o
+
+regle.o: regle.c regle.h
+    cc -c regle.c
+
+regledbg.o: regle.c regle.h
+    cc -g -c regle.c -o debug/regledbg.o
+
+ens_regles.o: ens_regles.c ens_regles.h
+    cc -c ens_regles.c
+
+ens_reglesdbg.o: ens_regles.c ens_regles.h
+    cc -g -c ens_regles.c -o debug/ens_reglesdbg.o
+
+lecture.o: lecture.c lecture.h
+    cc -c lecture.c
+
+lecture_dbg.o: lecture.c lecture.h
+    cc -g -c lecture.c -o debug/lecture_dbg.o
+
+clean:
+    -rm *.o
+
+\end{verbatim}
+
+\paragraph{Question 5}
+
 lien vers le code : \texttt{\href{https://github.com/LostExcalibur/mymake/blob/master/lecture.c}{lecture.c}}
 
 L’objectif ici est de lire le fichier \texttt{Makefile} pour obtenir un ensemble de règles (appelé \texttt{ens}), que l’on pourra ensuite exécuter suivant leur dépendances. Pour initialiser l’ensemble de règles, il nous faut d’abord connaître le nombres de règles. On fait donc un premier parcours du fichier (à l’aide le la fonction \texttt{nombre\_regles}, qui compte le nombre de \texttt{:} pour déterminer le nombre de règle) dans le but de compter le nombre de règles, afin d’initialiser notre ensemble de règles.
 
-Ensuite, on va ajouter les règles une à une dans l’ensemble de règles. Encore une fois, avant de créer notre règle avec nos prérequis et nos commandes, il nous faut connaître le nombre de prérequis, et le nombre de commandes. 
-
-\paragraph{Question 5}
+Ensuite, on va ajouter les règles une à une dans l’ensemble de règles. Encore une fois, avant de créer notre règle avec nos prérequis et nos commandes, il nous faut connaître le nombre de prérequis, et le nombre de commandes. On re-parcours ensuite la règle, en ajoutant d’abord les prérequis un par un, puis en ajoutant les commandes.
 
 \paragraph{Question 6}
 
@@ -97,7 +130,24 @@ Ensuite, on va ajouter les règles une à une dans l’ensemble de règles. Enco
 
 \section{Synthèse}
 
+Au final, ce projet fonctionne surprennament bien. Sur différents programmes test, ainsi que sur le programme \texttt{mymake} lui même, tout fonctionne parfaitement bien sans qu’il n’y ait de problmèse apparents (à condition que le fichier \texttt{Makefile} soit correctement écrit). La « performance » de ce programme est difficile à évaluer, mais le programme semble fonctionner de manière similaire à la commande \texttt{make} en terme de temps d’exécution.
+
+Il est cependant clair que certaines améliorations peuvent être apporté à notre programme. Nottament, lors de la lecture du fichier \texttt{Makefile}, on parcours au total 3 fois le fichier pour pouvoir construire notre ensemble de règle. Ce fonctionnement permet d’éviter l’utilisation de \texttt{realloc}, mais peut sembler ineffiace lorsque le fichier \texttt{Makefile} deviens vraiment grand.
+
+Nous n’avons également pas eu le temps d’implémenter des géstions d’erreurs en cas d’un fichier \texttt{Makefile} incomplet ou mal-fait, ce qui serait une grande amélioration.
+
+Un autre projet intéressant à regarder, en complément de celui-ci, serait de concevoir un programme permettant de construire le fameux fichier \texttt{Makefile}, ce qui garantirait une absence d’erreurs humaines dans la conception du fichier, et simplifierai aussi grandement la vie des programmeurs, car la conception de tels fichiers peut vite devenir fastidieuse.
+
 \section{Bibliographie}
+
+\begin{itemize}
+
+	\item Pour le fonctionnement de la fonction \texttt{getline}, nous avons utilisé les instructions sur du site \texttt{man7.org}, à cette addresse \href{https://www.man7.org/linux/man-pages/man3/getline.3.html}{getline(3) — Linux manual page}.
+
+	\item Pour la lecture des fichiers du dossiers (qu’on fait dans la fonction "appliquer\_ens\_regles"), on utilise le code trouvé à l’addresse : https://www.sanfoundry.com/c-program-list-files-directory/
+
+\end{itemize}
+
 
 
 
