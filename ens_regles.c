@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <time.h>
 
 // TODO : check malloc
 ens_regles* nouvel_ensemble(int nb_regles) {
@@ -40,23 +42,56 @@ regle* trouver_regle(ens_regles* ens, char* nom) {
 	return NULL;
 }
 
-void auxilliaire(ens_regles* ens, char* nom, char* nom_parent){
+int auxilliaire(ens_regles* ens, char* nom, char* nom_parent){
 	regle * r = trouver_regle(ens, nom);
 
+	// On n'a pas de règle correspondant à ce nom, c'est soit un fichier soit une erreur
 	if (r == NULL) {
+		// Il y a un fichier qui correspond
 		if (access(nom, F_OK) == 0) {
-			return;
+			struct stat stat_buffer;
+			if (stat(nom, &stat_buffer) == -1) {
+				perror("stat");
+				exit(1);
+			}	
+			
+			time_t modif = stat_buffer.st_mtime;
+			struct stat stat_parent;
+
+			// On va comparer avec le parent, on vérifie que le parent n'est pas NULL (argument passé au premier appel)
+			if (nom_parent == NULL) {
+				return 1;
+			}
+			// Problème avec le parent, on suppose que le fichier n'existe simplement pas (à cause d'un make clean par exemple) et donc on construit dans le doute.
+			if (stat(nom_parent, &stat_parent) == -1) {
+				return 1;
+			}
+
+			// Si il n'y a pas eu de problème, on compare les temps de modifications
+			if (modif > stat_parent.st_mtime) {
+				return 1;
+			}
+
+			return 0;
 		}	
 		fprintf(stderr,"Aucune règle pour fabriquer la cible %s, nécessaire pour %s\n", nom, nom_parent);
 		exit(1);
 	}
+
+	int modifie = 0;
+
 	for (int i = 0; i < r->n_prerequis; i++){
-		auxilliaire(ens, r->prerequis[i],nom);
+		if (auxilliaire(ens, r->prerequis[i],nom)) {
+			modifie = 1;
+		}
 	}
-	for (int i =0; i < r->n_commandes; i++){
-		printf("%s", r->commandes[i] + 1);
-		system(r->commandes[i]);
+	if (modifie) {
+		for (int i =0; i < r->n_commandes; i++){
+			printf("%s", r->commandes[i] + 1);
+			system(r->commandes[i]);
+		}
 	}
+	return modifie;
 }
 
 void appliquer_ens_regle(ens_regles* ens, char* nom) {
@@ -66,7 +101,9 @@ void appliquer_ens_regle(ens_regles* ens, char* nom) {
 		return ;
 	}
 
-	auxilliaire(ens, nom,NULL);
+	if (!auxilliaire(ens, nom,NULL)) {
+		printf("La cible %s est à jour\n", nom);
+	}
 }
 
 
