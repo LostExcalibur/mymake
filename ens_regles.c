@@ -32,9 +32,14 @@ void ajouter_regle(ens_regles *ens, regle *r) {
   ens->regles[ens->regle_actuelle] = r;
   
   int i = ens->regle_actuelle;
-
+  // On part du principe que les règles déjà présentes sont triées par ordre croissant
+  // Quand on veut rajouter une règle, on n'a donc qu'à la faire redescendre
+  // jusqu'à avoir atteint le début ou une règle plus petite dans l'ordre
+  // lexicographique
   while (i > 0 && strcmp(ens->regles[i]->nom, ens->regles[i - 1]->nom) < 0) {
 	swap((void **) &ens->regles[i], (void **) &ens->regles[i-1]);
+	// Il faut que l'index de la première règle du fichier reste correct, donc
+	// il faut le modifier si on change la règle correspondante de place
 	if (ens->premiere_regle == i - 1) {
 		ens->premiere_regle += 1;
 	}
@@ -46,11 +51,21 @@ void ajouter_regle(ens_regles *ens, regle *r) {
 }
 
 regle *trouver_regle(ens_regles *ens, char *nom) {
-  for (int i = 0; i < ens->regle_actuelle; i++) {
-    if (strcmp(ens->regles[i]->nom, nom) == 0) {
-      return ens->regles[i];
-    }
+  int debut = 0, fin = ens->regle_actuelle - 1;
+  int milieu, res;
+
+  while (debut <= fin) {
+	milieu = (debut + fin) / 2; 
+	if ((res = strcmp(nom, ens->regles[milieu]->nom)) == 0) {
+		return ens->regles[milieu];
+	}
+	if (res < 0) {
+	  fin = milieu - 1; 
+	} else {
+	  debut = milieu + 1;
+	}
   }
+
   return NULL;
 }
 
