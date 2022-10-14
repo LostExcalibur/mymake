@@ -7,6 +7,7 @@ typedef struct Ens_Regles {
   regle **regles;
 
   int regle_actuelle;
+  int premiere_regle;
 } ens_regles;
 
 ens_regles *nouvel_ensemble(int nb_regles);

@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
       appliquer_ens_regle(ens, argv[i]);
     }
   } else {
-    appliquer_ens_regle(ens, ens->regles[0]->nom);
+    appliquer_ens_regle(ens, ens->regles[ens->premiere_regle]->nom);
   }
   detruire_ensemble(ens);
 

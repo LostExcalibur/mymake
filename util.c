@@ -13,3 +13,11 @@ void *check_malloc(size_t size) {
 
   return ptr;
 }
+
+void swap(void** a, void** b) {
+	void* tmp = *a;
+
+	*a = *b;
+
+	*b = tmp;
+}

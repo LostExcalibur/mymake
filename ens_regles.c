@@ -15,6 +15,7 @@ ens_regles *nouvel_ensemble(int nb_regles) {
   ens->regles = check_malloc(nb_regles * sizeof(regle *));
 
   ens->regle_actuelle = 0;
+  ens->premiere_regle = 0;
 
   return ens;
 }
@@ -29,6 +30,18 @@ void detruire_ensemble(ens_regles *ens) {
 
 void ajouter_regle(ens_regles *ens, regle *r) {
   ens->regles[ens->regle_actuelle] = r;
+  
+  int i = ens->regle_actuelle;
+
+  while (i > 0 && strcmp(ens->regles[i]->nom, ens->regles[i - 1]->nom) < 0) {
+	swap((void **) &ens->regles[i], (void **) &ens->regles[i-1]);
+	if (ens->premiere_regle == i - 1) {
+		ens->premiere_regle += 1;
+	}
+
+	i -= 1;
+  }
+  
   ens->regle_actuelle++;
 }
 
