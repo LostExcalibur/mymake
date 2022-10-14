@@ -3,6 +3,6 @@
 
 #include "ens_regles.h"
 
-ens_regles* lire_fichier(const char* nom);
+ens_regles *lire_fichier(const char *nom);
 
 #endif // __LECTURE_H

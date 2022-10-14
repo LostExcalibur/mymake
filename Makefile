@@ -1,8 +1,8 @@
-mymake: main.c regle.o ens_regles.o lecture.o  
-	cc -Wall -Wextra -o mymake main.c regle.o ens_regles.o lecture.o
+mymake : main.c regle.o ens_regles.o lecture.o util.o 
+	cc -Wall -Wextra -o mymake main.c regle.o ens_regles.o lecture.o util.o
 
-debug: main.c regledbg.o ens_reglesdbg.o lecture_dbg.o
-	cc -Wall -Wextra -g -o debug/dbg_make -Og main.c debug/regledbg.o debug/ens_reglesdbg.o debug/lecture_dbg.o
+debug: main.c regledbg.o ens_reglesdbg.o lecture_dbg.o util_dbg.o
+	cc -Wall -Wextra -g -o debug/dbg_make -Og main.c debug/regledbg.o debug/ens_reglesdbg.o debug/lecture_dbg.o debug/util_dbg.o
 
 regle.o: regle.c regle.h
 	cc -c regle.c
@@ -21,6 +21,12 @@ lecture.o: lecture.c lecture.h
 
 lecture_dbg.o: lecture.c lecture.h
 	cc -g -c lecture.c -o debug/lecture_dbg.o
+
+util.o: util.c util.h
+	cc -c util.c
+
+util_dbg.o: util.c util.h
+	cc -g -c util.c -o debug/util_dbg.o
 
 clean:
 	rm *.o
