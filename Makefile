@@ -1,4 +1,4 @@
-mymake : main.c regle.o ens_regles.o lecture.o util.o 
+mymake: main.c regle.o ens_regles.o lecture.o util.o   
 	cc -Wall -Wextra -o mymake main.c regle.o ens_regles.o lecture.o util.o
 
 debug: main.c regle_dbg.o ens_regles_dbg.o lecture_dbg.o util_dbg.o
@@ -30,4 +30,6 @@ util_dbg.o: util.c util.h
 
 clean:
 	rm *.o
-
+ 
+install: mymake
+	cp mymake ~/.local/bin 

@@ -4,20 +4,20 @@
 #include <stdlib.h>
 
 void *check_malloc(size_t size) {
-  void *ptr = malloc(size);
+    void *ptr = malloc(size);
 
-  if (ptr == NULL) {
-    perror("malloc");
-    exit(1);
-  }
+    if (ptr == NULL) {
+        perror("malloc");
+        exit(1);
+    }
 
-  return ptr;
+    return ptr;
 }
 
-void swap(void** a, void** b) {
-	void* tmp = *a;
+void swap(void **a, void **b) {
+    void *tmp = *a;
 
-	*a = *b;
+    *a = *b;
 
-	*b = tmp;
+    *b = tmp;
 }

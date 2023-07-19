@@ -2,12 +2,12 @@
 #define __REGLE_H
 
 typedef struct Regle {
-  char *nom;
-  char **prerequis;
-  char **commandes;
+    char *nom;
+    char **prerequis;
+    char **commandes;
 
-  int prerequis_actuel;
-  int commande_actuelle;
+    int prerequis_actuel;
+    int commande_actuelle;
 } regle;
 
 regle *nouvelle_regle(char *nom, int n_prerequis, int n_commandes);

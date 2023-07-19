@@ -4,10 +4,10 @@
 #include "regle.h"
 
 typedef struct Ens_Regles {
-  regle **regles;
+    regle **regles;
 
-  int regle_actuelle;
-  int premiere_regle;
+    int regle_actuelle;
+    int premiere_regle;
 } ens_regles;
 
 ens_regles *nouvel_ensemble(int nb_regles);
