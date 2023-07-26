@@ -25,6 +25,11 @@
 */
 // clang-format on
 
+// TODO : Reconstruire aussi les règles si le fichier Makefile est plus récent
+// TODO : Supporter les variables
+// TODO : Règles et variables spéciales
+// TODO : Option -j (multithread)
+
 int main(int argc, char **argv) {
     string_da *lignes = lire_fichier("Makefile");
     ens_regles *ens = parser_lignes(lignes);

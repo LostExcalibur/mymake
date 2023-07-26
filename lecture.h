@@ -5,6 +5,6 @@
 #include "util.h"
 
 string_da *lire_fichier(const char *nom);
-ens_regles *parser_lignes(string_da* ens);
+ens_regles *parser_lignes(string_da* lignes);
 
 #endif // __LECTURE_H
