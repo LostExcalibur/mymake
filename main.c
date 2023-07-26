@@ -1,10 +1,9 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "ens_regles.h"
 #include "lecture.h"
 #include "regle.h"
+#include "util.h"
 
 // clang-format off
 /*
@@ -27,7 +26,9 @@
 // clang-format on
 
 int main(int argc, char **argv) {
-    ens_regles *ens = lire_fichier("Makefile");
+    string_da *lignes = lire_fichier("Makefile");
+    ens_regles *ens = parser_lignes(lignes);
+
     if (argc > 1) {
         for (int i = 1; i < argc; i++) {
             appliquer_ens_regle(ens, argv[i]);
@@ -35,6 +36,8 @@ int main(int argc, char **argv) {
     } else {
         appliquer_ens_regle(ens, ens->regles[ens->premiere_regle]->nom);
     }
+
+    string_da_free(lignes);
     detruire_ensemble(ens);
 
     return 0;
