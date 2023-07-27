@@ -12,7 +12,7 @@
 ens_regles *nouvel_ensemble(int nb_regles) {
     ens_regles *ens = check_malloc(sizeof(ens_regles));
 
-    ens->regles = check_malloc(nb_regles * sizeof(regle *));
+    ens->regles = check_calloc(nb_regles, sizeof(regle *));
 
     ens->regle_actuelle = 0;
     ens->premiere_regle = 0;

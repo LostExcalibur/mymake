@@ -7,8 +7,8 @@
 
 regle *nouvelle_regle(char *nom, int n_prerequis, int n_commandes) {
     regle *r = check_malloc(sizeof(regle));
-    r->prerequis = check_malloc(sizeof(char *) * n_prerequis);
-    r->commandes = check_malloc(sizeof(char *) * n_commandes);
+    r->prerequis = check_calloc(n_prerequis, sizeof(char *));
+    r->commandes = check_calloc(n_commandes, sizeof(char *));
 
     r->nom = nom;
 

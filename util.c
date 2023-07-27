@@ -20,8 +20,10 @@ void *_check_malloc(size_t size, char *file, int line) {
     return ptr;
 }
 
-void *check_calloc(size_t nmemb, size_t size) {
+void *_check_calloc(size_t nmemb, size_t size, char *file, int line) {
+    debug("Callocing %zu * %zu bytes from %s:%d\n", nmemb, size, file, line);
     void *ptr = calloc(nmemb, size);
+
     if (ptr == NULL) {
         perror("calloc ");
         exit(-1);
@@ -88,7 +90,7 @@ void string_da_append(string_da *da, char *value) {
 void string_da_delete(string_da *da, size_t index) {
     assert(index < da->length && "Out of bounds");
 
-    char **tmp = check_malloc(da->capacity * sizeof(char *));
+    char **tmp = check_calloc(da->capacity, sizeof(char *));
 
     char *removed = da->data[index];
     free(removed);
