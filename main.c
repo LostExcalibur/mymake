@@ -25,7 +25,6 @@
 */
 // clang-format on
 
-// TODO : Reconstruire aussi les règles si le fichier Makefile est plus récent
 // TODO : Rajouter des options cmdline comme -C ou -f
 // TODO : Supporter les variables
 // TODO : Règles et variables spéciales
