@@ -2,6 +2,8 @@
 #include "regle.h"
 #include "util.h"
 
+#include <asm-generic/errno-base.h>
+#include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -71,25 +73,28 @@ regle *trouver_regle(ens_regles *ens, char *nom) {
     return NULL;
 }
 
-bool construire_opti(ens_regles *ens, char *nom, char *nom_parent) {
+bool construire_opti(ens_regles *ens, char *nom, char *nom_parent,
+                     time_t date_min) {
     regle *r = trouver_regle(ens, nom);
 
     // On n'a pas de règle correspondant à ce nom, c'est soit un fichier soit
     // une erreur
     if (r == NULL) {
-        // Il n'y a pas de fichier qui correspond, on ne peut pas faire la règle
-        if (access(nom, F_OK) != 0) {
-            fprintf(stderr,
-                    "Aucune règle pour fabriquer la cible «%s», nécessaire "
-                    "pour %s\n",
-                    nom, nom_parent);
-            exit(1);
-        }
-
         struct stat stat_buffer;
         if (stat(nom, &stat_buffer) == -1) {
-            perror("stat");
-            exit(1);
+            // Il n'y a pas de fichier qui correspond, on ne peut pas faire la
+            // règle
+            if (errno == ENOENT) {
+                fprintf(stderr,
+                        "Aucune règle pour fabriquer la cible «%s», nécessaire "
+                        "pour %s\n",
+                        nom, nom_parent);
+                exit(1);
+                // Une autre erreur s'est produite
+            } else {
+                perror(nom);
+                exit(1);
+            }
         }
 
         // On va comparer avec le parent, on vérifie que le parent n'est pas
@@ -99,16 +104,26 @@ bool construire_opti(ens_regles *ens, char *nom, char *nom_parent) {
         }
 
         struct stat stat_parent;
-        // Problème avec le parent, on suppose que le fichier n'existe
-        // simplement pas (à cause d'un make clean par exemple) et donc on
-        // construit dans le doute.
+        // Cas où le parent pourrait ne pas exister à cause d'un make clean par
+        // exemple
         if (stat(nom_parent, &stat_parent) == -1) {
+            // Ce n'est normal que si le parent n'existe pas
+            if (errno == ENOENT)
+                return true;
+
+            perror("stat");
+            exit(1);
+        }
+
+        // Si la cible est plus récente que son parent, on refait.
+        if (stat_buffer.st_mtime > stat_parent.st_mtime) {
             return true;
         }
 
-        // Si il n'y a pas eu de problème, on compare les temps de
-        // modifications
-        return stat_buffer.st_mtime > stat_parent.st_mtime;
+        // Sinon, si le makefile est plus récent que le fichie et son parent,
+        // on refait
+        return date_min > stat_buffer.st_mtime &&
+               date_min > stat_parent.st_mtime;
     }
 
     // Si on a des prérequis, on veut vérifier qu'ils ont besoin d'être
@@ -117,7 +132,7 @@ bool construire_opti(ens_regles *ens, char *nom, char *nom_parent) {
     bool modifie = r->prerequis_actuel == 0;
 
     for (int i = 0; i < r->prerequis_actuel; i++) {
-        if (construire_opti(ens, r->prerequis[i], nom)) {
+        if (construire_opti(ens, r->prerequis[i], nom, date_min)) {
             modifie = true;
         }
     }
@@ -138,7 +153,15 @@ void appliquer_ens_regle(ens_regles *ens, char *nom) {
         return;
     }
 
-    if (!construire_opti(ens, nom, NULL)) {
+    struct stat make_stat;
+    if (stat("Makefile", &make_stat) == -1) {
+        perror("Makefile");
+        exit(1);
+    }
+
+    time_t date_min = make_stat.st_mtime;
+
+    if (!construire_opti(ens, nom, NULL, date_min)) {
         printf("La cible %s est à jour\n", nom);
     }
 }
