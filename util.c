@@ -13,7 +13,7 @@ void *_check_malloc(size_t size, char *file, int line) {
     if (ptr == NULL) {
         char error_message[50];
         snprintf(error_message, 50, "malloc %s:%d", file, line);
-        perror("malloc ");
+        perror(error_message);
         exit(1);
     }
 
