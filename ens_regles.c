@@ -36,15 +36,16 @@ void detruire_ensemble(ens_regles *ens) {
 
 void ajouter_regle(ens_regles *ens, regle *r) {
     assert(ens->longueur <= ens->capacite && "Sanity check");
-    assert(0 < ens->capacite && "Sanity check");    
+    assert(0 < ens->capacite && "Sanity check");
 
     if (ens->longueur == ens->capacite) {
         ens->capacite *= 2;
         debug("Reallocing array to %zu elements\n", ens->capacite);
 
-        ens->regles = check_realloc_array(ens->regles, ens->capacite, sizeof(char *));
+        ens->regles =
+            check_realloc_array(ens->regles, ens->capacite, sizeof(char *));
     }
-    
+
     ens->regles[ens->longueur] = r;
 
     int i = ens->longueur;
@@ -152,6 +153,7 @@ bool construire_opti(ens_regles *ens, char *nom, char *nom_parent,
     if (modifie) {
         for (int i = 0; i < r->commande_actuelle; i++) {
             printf("%s", r->commandes[i] + 1);
+            // if (false)
             system(r->commandes[i]);
         }
     }

@@ -20,12 +20,24 @@ void *_check_malloc(size_t size, char *file, int line) {
     return ptr;
 }
 
+void *_check_realloc(void *ptr, size_t size, char *file, int line) {
+    debug("Reallocing to %zu bytes from %s:%d\n", size, file, line);
+    ptr = realloc(ptr, size);
+
+    if (ptr == NULL) {
+        perror("realloc");
+        exit(1);
+    }
+
+    return ptr;
+}
+
 void *_check_calloc(size_t nmemb, size_t size, char *file, int line) {
     debug("Callocing %zu * %zu bytes from %s:%d\n", nmemb, size, file, line);
     void *ptr = calloc(nmemb, size);
 
     if (ptr == NULL) {
-        perror("calloc ");
+        perror("calloc");
         exit(-1);
     }
 

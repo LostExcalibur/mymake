@@ -5,11 +5,11 @@
 
 #include <assert.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 
 void eliminer_commentaires(string_da *lignes) {
     for (size_t i = 0; i < lignes->length; i++) {
@@ -28,26 +28,56 @@ bool ligne_est_vide(const char *ligne) {
     return ligne[premier_char] == '\n';
 }
 
-uint32_t ajouter_prochaine_regle(size_t premiere_ligne, ens_regles *ens,
+uint32_t parse_prochaines_lignes(size_t premiere_ligne, ens_regles *ens,
                                  string_da *lignes) {
-    if (premiere_ligne > lignes->length) {
+    if (premiere_ligne >= lignes->length) {
         return 0;
     }
-    char **ligne_iter = lignes->data + premiere_ligne;
-    char *ligne = *ligne_iter;
+
+    size_t indice_ligne = premiere_ligne;
+
+    char *ligne = lignes->data[indice_ligne];
     // On saute les lignes vides
     while (ligne_est_vide(ligne)) {
-        ligne_iter++;
-        if (ligne_iter >= lignes->data + lignes->length) {
-            return (ligne_iter - lignes->data);
+        indice_ligne++;
+        if (indice_ligne >= lignes->length) {
+            return indice_ligne - premiere_ligne;
         }
-        ligne = *ligne_iter;
+        ligne = lignes->data[indice_ligne];
     }
 
     size_t taille_ligne;
     // On enlève le \n
     {
         taille_ligne = strlen(ligne);
+
+        if (taille_ligne >= 2) {
+            while (indice_ligne + 1 < lignes->length) {
+                // Ligne normale
+                if (ligne[taille_ligne - 2] != '\\') {
+                    break;
+                }
+                // Ligne multiple
+                debug("Ligne multiple détectée : %s", ligne);
+                char *prochaine = lignes->data[indice_ligne + 1];
+                debug("Prochaine ligne : %s", prochaine);
+                size_t taille_prochaine = strlen(prochaine);
+                size_t whitespace = strspn(prochaine, "\t ");
+                debug("Taille de whitespace : %zu, taille de prochaine : %zu\n",
+                      whitespace, taille_prochaine);
+                ligne[taille_ligne - 2] = ' ';
+
+                ligne = check_realloc(ligne, taille_ligne + taille_prochaine -
+                                                 whitespace);
+                memcpy(ligne + taille_ligne - 1, prochaine + whitespace,
+                       taille_prochaine - whitespace + 1);
+
+                debug("Ligne finale : %s", ligne);
+                taille_ligne += taille_prochaine - whitespace - 1;
+                string_da_delete(lignes, indice_ligne + 1);
+            }
+        }
+
         ligne[taille_ligne - 1] = '\0';
         taille_ligne -= 1;
 
@@ -69,27 +99,29 @@ uint32_t ajouter_prochaine_regle(size_t premiere_ligne, ens_regles *ens,
 
     int debut_prerequis = curseur + 1;
     // Calcul du nombre de prerequis
-    for (size_t i = curseur + 1; i < taille_ligne; i += strspn(ligne + i, " ")) {
+    for (size_t i = curseur + 1; i < taille_ligne;
+         i += strspn(ligne + i, " ")) {
         nb_prerequis += 1;
         i += strcspn(ligne + i, " ");
     }
     debug("Trouvé %d prérequis\n", nb_prerequis);
 
     // Calcul du nombre de commandes
-    ligne_iter++;
-    ligne = *ligne_iter;
+    indice_ligne++;
+    ligne = lignes->data[indice_ligne];
     int nb_commandes = 0;
-    while (ligne_iter < lignes->data + lignes->length && ligne[0] == '\t') {
+    while (indice_ligne < lignes->length && ligne[0] == '\t') {
         nb_commandes += 1;
-        ligne_iter++;
-        ligne = *ligne_iter;
+        indice_ligne++;
+        ligne = lignes->data[indice_ligne];
     }
+    // TODO : supporter les cibles sans commandes
     assert(nb_commandes > 0 && "Makefile mal formé");
     debug("Trouvé %d commandes\n", nb_commandes);
 
     // On revient sur la ligne du nom de la règle
-    ligne_iter -= nb_commandes + 1;
-    ligne = *ligne_iter;
+    indice_ligne -= nb_commandes + 1;
+    ligne = lignes->data[indice_ligne];
 
     regle *r = nouvelle_regle(ligne, nb_prerequis, nb_commandes);
 
@@ -101,27 +133,26 @@ uint32_t ajouter_prochaine_regle(size_t premiere_ligne, ens_regles *ens,
         }
     }
 
-    ligne_iter++;
-    ligne = *ligne_iter;
+    indice_ligne++;
+    ligne = lignes->data[indice_ligne];
 
-    while (ligne_iter < lignes->data + lignes->length && ligne[0] == '\t') {
+    while (indice_ligne < lignes->length && ligne[0] == '\t') {
         // on stocke le \t mais pas un pb normalement
         ajouter_commande(r, ligne);
-        ligne_iter++;
-        ligne = *ligne_iter;
+        indice_ligne++;
+        ligne = lignes->data[indice_ligne];
     }
 
     ajouter_regle(ens, r);
 
-    return ligne_iter - (lignes->data + premiere_ligne);
+    return indice_ligne - premiere_ligne;
 }
 
-void parse_toutes_regles(ens_regles *ens, string_da *lignes) {
+void parse_tout_fichier(ens_regles *ens, string_da *lignes) {
     size_t premiere_ligne = 0;
 
     while (premiere_ligne < lignes->length) {
-        debug("Ligne : %s\n", lignes->data[premiere_ligne]);
-        premiere_ligne += ajouter_prochaine_regle(premiere_ligne, ens, lignes);
+        premiere_ligne += parse_prochaines_lignes(premiere_ligne, ens, lignes);
     }
 }
 
@@ -153,6 +184,6 @@ ens_regles *parser_lignes(string_da *lignes) {
     // int nb_regles = nombre_regles(lignes);
     ens_regles *ens = nouvel_ensemble();
 
-    parse_toutes_regles(ens, lignes);
+    parse_tout_fichier(ens, lignes);
     return ens;
 }
