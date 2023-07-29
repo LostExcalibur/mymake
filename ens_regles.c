@@ -3,8 +3,10 @@
 #include "util.h"
 
 #include <asm-generic/errno-base.h>
+#include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,19 +14,20 @@
 #include <time.h>
 #include <unistd.h>
 
-ens_regles *nouvel_ensemble(int nb_regles) {
+ens_regles *nouvel_ensemble() {
     ens_regles *ens = check_malloc(sizeof(ens_regles));
 
-    ens->regles = check_calloc(nb_regles, sizeof(regle *));
+    ens->regles = check_calloc(2, sizeof(regle *));
 
-    ens->regle_actuelle = 0;
+    ens->capacite = 2;
+    ens->longueur = 0;
     ens->premiere_regle = 0;
 
     return ens;
 }
 
 void detruire_ensemble(ens_regles *ens) {
-    for (int i = 0; i < ens->regle_actuelle; i++) {
+    for (size_t i = 0; i < ens->longueur; i++) {
         detruire_regle(ens->regles[i]);
     }
     free(ens->regles);
@@ -32,9 +35,19 @@ void detruire_ensemble(ens_regles *ens) {
 }
 
 void ajouter_regle(ens_regles *ens, regle *r) {
-    ens->regles[ens->regle_actuelle] = r;
+    assert(ens->longueur <= ens->capacite && "Sanity check");
+    assert(0 < ens->capacite && "Sanity check");    
 
-    int i = ens->regle_actuelle;
+    if (ens->longueur == ens->capacite) {
+        ens->capacite *= 2;
+        debug("Reallocing array to %zu elements\n", ens->capacite);
+
+        ens->regles = check_realloc_array(ens->regles, ens->capacite, sizeof(char *));
+    }
+    
+    ens->regles[ens->longueur] = r;
+
+    int i = ens->longueur;
     // On part du principe que les règles déjà présentes sont triées par ordre
     // croissant Quand on veut rajouter une règle, on n'a donc qu'à la faire
     // redescendre jusqu'à avoir atteint le début ou une règle plus petite dans
@@ -51,11 +64,11 @@ void ajouter_regle(ens_regles *ens, regle *r) {
         i -= 1;
     }
 
-    ens->regle_actuelle++;
+    ens->longueur++;
 }
 
 regle *trouver_regle(ens_regles *ens, char *nom) {
-    int debut = 0, fin = ens->regle_actuelle - 1;
+    int debut = 0, fin = ens->longueur - 1;
     int milieu, res;
 
     while (debut <= fin) {
@@ -167,7 +180,7 @@ void appliquer_ens_regle(ens_regles *ens, char *nom) {
 }
 
 void afficher_ensemble(ens_regles *ens) {
-    for (int i = 0; i < ens->regle_actuelle; i++) {
+    for (size_t i = 0; i < ens->longueur; i++) {
         afficher_regle(ens->regles[i]);
     }
 }

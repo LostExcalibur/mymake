@@ -18,10 +18,15 @@
     } while (0);
 
 #define check_malloc(size) _check_malloc((size), __FILE__, __LINE__)
-#define check_calloc(nmemb, size) _check_calloc((nmemb), (size), __FILE__, __LINE__)
+#define check_calloc(nmemb, size)                                              \
+    _check_calloc((nmemb), (size), __FILE__, __LINE__)
+#define check_realloc_array(ptr, nmemb, size)                                  \
+    _check_realloc_array((ptr), (nmemb), (size), __FILE__, __LINE__)
 
 void *_check_malloc(size_t size, char *file, int line);
 void *_check_calloc(size_t nmemb, size_t size, char *file, int line);
+void *_check_realloc_array(void *ptr, size_t nmemb, size_t size, char *file,
+                           int line);
 void swap(void **a, void **b);
 
 typedef struct {

@@ -10,21 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// TODO : Compter plutot le nombre de lignes non vides ne commençant pas par \t
-// Pour pouvoir construire l’ensemble de règles, il nous faut d’abord
-// connaître le nombre de règle. On fait donc un premier parcours du Makefile,
-// où on compte le nombre de ':', qui est équivalent au nombre de règles.
-int nombre_regles(const string_da *lignes) {
-    int n = 0;
-    char *c;
-    for (size_t i = 0; i < lignes->length; i++) {
-        char *ligne = lignes->data[i];
-        for (c = ligne; *c != '#' && *c != '\0'; c++) {
-            n += (*c == ':');
-        }
-    }
-    return n;
-}
 
 void eliminer_commentaires(string_da *lignes) {
     for (size_t i = 0; i < lignes->length; i++) {
@@ -165,8 +150,8 @@ string_da *lire_fichier(const char *nom) {
 }
 
 ens_regles *parser_lignes(string_da *lignes) {
-    int nb_regles = nombre_regles(lignes);
-    ens_regles *ens = nouvel_ensemble(nb_regles);
+    // int nb_regles = nombre_regles(lignes);
+    ens_regles *ens = nouvel_ensemble();
 
     parse_toutes_regles(ens, lignes);
     return ens;

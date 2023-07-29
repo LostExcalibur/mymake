@@ -32,8 +32,11 @@ void *_check_calloc(size_t nmemb, size_t size, char *file, int line) {
     return ptr;
 }
 
-void *check_realloc_array(void *ptr, size_t capacity, size_t size) {
-    void *tmp = reallocarray(ptr, capacity, size);
+void *_check_realloc_array(void *ptr, size_t nmemb, size_t size, char *file,
+                           int line) {
+    debug("Reallocing array to %zu elements from %s:%d\n", nmemb, file, line);
+
+    void *tmp = reallocarray(ptr, nmemb, size);
 
     if (tmp == NULL) {
         perror("realloc");
@@ -76,8 +79,6 @@ void string_da_append(string_da *da, char *value) {
     assert(0 < da->capacity && "Sanity check");
     if (da->length == da->capacity) {
         da->capacity *= 2;
-        debug("Reallocing array to %zu elements\n", da->capacity);
-
         da->data = check_realloc_array(da->data, da->capacity, sizeof(char *));
     }
     debug("%zu elems out of %zu\n", da->length, da->capacity);

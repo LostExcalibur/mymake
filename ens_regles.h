@@ -2,15 +2,17 @@
 #define __ENS_REGLES_H
 
 #include "regle.h"
+#include <stddef.h>
 
 typedef struct Ens_Regles {
     regle **regles;
+    size_t capacite;
+    size_t longueur;
 
-    int regle_actuelle;
     int premiere_regle;
 } ens_regles;
 
-ens_regles *nouvel_ensemble(int nb_regles);
+ens_regles *nouvel_ensemble();
 void detruire_ensemble(ens_regles *ens);
 
 void ajouter_regle(ens_regles *ens, regle *r);
