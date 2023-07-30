@@ -38,7 +38,7 @@ void *_check_calloc(size_t nmemb, size_t size, char *file, int line) {
 
     if (ptr == NULL) {
         perror("calloc");
-        exit(-1);
+        exit(1);
     }
 
     return ptr;
@@ -66,7 +66,7 @@ void swap(void **a, void **b) {
     *b = tmp;
 }
 
-string_da *string_da_alloc() {
+string_da *string_da_alloc(void) {
     string_da *da = check_malloc(sizeof(string_da));
 
     da->data = check_calloc(2, sizeof(char *));

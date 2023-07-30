@@ -12,7 +12,7 @@ typedef struct Ens_Regles {
     int premiere_regle;
 } ens_regles;
 
-ens_regles *nouvel_ensemble();
+ens_regles *nouvel_ensemble(void);
 void detruire_ensemble(ens_regles *ens);
 
 void ajouter_regle(ens_regles *ens, regle *r);

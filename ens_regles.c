@@ -14,7 +14,7 @@
 #include <time.h>
 #include <unistd.h>
 
-ens_regles *nouvel_ensemble() {
+ens_regles *nouvel_ensemble(void) {
     ens_regles *ens = check_malloc(sizeof(ens_regles));
 
     ens->regles = check_calloc(2, sizeof(regle *));

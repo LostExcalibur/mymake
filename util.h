@@ -17,6 +17,12 @@
                    __VA_ARGS__);                                               \
     } while (0);
 
+#define NOT_IMPLEMENTED() assert(false && "Not implemented yet")
+
+#define PROCHAIN_TOKEN(p)                                                      \
+    while (*p == ' ' || *p == '\t')                                            \
+        p++;
+
 #define check_malloc(size) _check_malloc((size), __FILE__, __LINE__)
 #define check_realloc(ptr, size)                                               \
     _check_realloc((ptr), (size), __FILE__, __LINE__)
@@ -38,7 +44,7 @@ typedef struct {
     size_t length;
 } string_da;
 
-string_da *string_da_alloc();
+string_da *string_da_alloc(void);
 void string_da_free(string_da *da);
 void string_da_append(string_da *da, char *value);
 void string_da_delete(string_da *da, size_t index);
